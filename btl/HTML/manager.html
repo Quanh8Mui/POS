@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manager POS</title>
+
+    <link rel="stylesheet" href="D:/btl/CSS/manager.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <h2>BUSINESS USER</h2>
+
+        <ul>
+
+            <li onclick="showSection('pos')">
+                POS Bán Hàng
+            </li>
+
+            <li onclick="showSection('stock')">
+                Quản Lý Tồn Kho
+            </li>
+
+            <li onclick="showSection('promotion')">
+                Khuyến Mãi
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- POS -->
+        <div id="pos" class="section active">
+
+            <h1>POS Bán Hàng</h1>
+
+            <!-- DANH SÁCH SẢN PHẨM -->
+            <div class="product-list">
+
+                <!-- PRODUCT -->
+                <div class="product-card">
+
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/13/Coca_Cola_can.png">
+
+                    <h3>Coca Cola</h3>
+
+                    <p>15.000đ</p>
+
+                    <button>Chọn</button>
+
+                </div>
+
+                <!-- PRODUCT -->
+                <div class="product-card">
+
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Pepsi_can_2023.png">
+
+                    <h3>Pepsi</h3>
+
+                    <p>14.000đ</p>
+
+                    <button>Chọn</button>
+
+                </div>
+
+                <!-- PRODUCT -->
+                <div class="product-card">
+
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Oreo-Two-Cookies.jpg/640px-Oreo-Two-Cookies.jpg">
+
+                    <h3>Oreo</h3>
+
+                    <p>22.000đ</p>
+
+                    <button>Chọn</button>
+
+                </div>
+
+                <!-- PRODUCT -->
+                <div class="product-card">
+
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Potato-Chips.jpg/640px-Potato-Chips.jpg">
+
+                    <h3>Snack Lay's</h3>
+
+                    <p>18.000đ</p>
+
+                    <button>Chọn</button>
+
+                </div>
+
+            </div>
+
+            <!-- HÓA ĐƠN -->
+            <div class="invoice-box">
+
+                <h2>Hóa Đơn</h2>
+
+                <table>
+
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>SL</th>
+                        <th>Giá</th>
+                    </tr>
+
+                    <tr>
+                        <td>Coca Cola</td>
+                        <td>2</td>
+                        <td>30.000đ</td>
+                    </tr>
+
+                    <tr>
+                        <td>Snack Lay's</td>
+                        <td>1</td>
+                        <td>18.000đ</td>
+                    </tr>
+
+                </table>
+
+                <div class="total">
+
+                    Tổng tiền:
+                    <span>48.000đ</span>
+
+                </div>
+
+                <button class="pay-btn">
+                    Thanh Toán
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- TỒN KHO -->
+        <div id="stock" class="section">
+
+            <h1>Quản Lý Tồn Kho</h1>
+
+            <table>
+
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Tồn kho</th>
+                    <th>Trạng thái</th>
+                </tr>
+
+                <tr>
+                    <td>Coca Cola</td>
+                    <td>50</td>
+                    <td>Còn hàng</td>
+                </tr>
+
+                <tr>
+                    <td>Pepsi</td>
+                    <td>10</td>
+                    <td>Sắp hết</td>
+                </tr>
+
+                <tr>
+                    <td>Snack Lay's</td>
+                    <td>0</td>
+                    <td>Hết hàng</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!-- KHUYẾN MÃI -->
+        <div id="promotion" class="section">
+
+            <h1>Khuyến Mãi</h1>
+
+            <div class="box">
+
+                <input type="text"
+                       placeholder="Tên chương trình">
+
+                <input type="number"
+                       placeholder="% giảm giá">
+
+                <button>
+                    Tạo Khuyến Mãi
+                </button>
+
+            </div>
+
+            <table>
+
+                <tr>
+                    <th>Chương trình</th>
+                    <th>Giảm giá</th>
+                    <th>Trạng thái</th>
+                </tr>
+
+                <tr>
+                    <td>Sale cuối tuần</td>
+                    <td>20%</td>
+                    <td>Đang hoạt động</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+
+        function showSection(id){
+
+            let sections =
+                document.querySelectorAll('.section');
+
+            sections.forEach(function(section){
+
+                section.classList.remove('active');
+
+            });
+
+            document.getElementById(id)
+                .classList.add('active');
+        }
+
+    </script>
+
+</body>
+</html>
