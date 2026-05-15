@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  # Thêm backend, frontend, database services khi sẵn sàng
+  app:
+    image: alpine:3.20
+    command: ["sh", "-c", "echo POS project structure ready && sleep infinity"]
