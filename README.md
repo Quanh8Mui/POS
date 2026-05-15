@@ -2,7 +2,23 @@
 
 ## Hướng dẫn cài đặt và chạy
 
-Dự án hiện tại được tổ chức theo cấu trúc mẫu để phục vụ báo cáo capstone và phát triển tính năng sau này.
+### Chạy bằng Docker
+
+1. Sao chép `backend/.env.example` thành `backend/.env`
+2. Khởi động Docker Compose:
+   ```bash
+   docker compose up --build
+   ```
+3. Backend sẽ chạy tại `http://localhost:8000`
+4. Frontend placeholder sẽ chạy tại `http://localhost:3000`
+
+### Kết nối PostgreSQL bằng DBeaver
+
+- Host: `localhost`
+- Port: `5432`
+- Database: `pos`
+- Username: `postgres`
+- Password: `postgres`
 
 ### Cấu trúc thư mục
 
