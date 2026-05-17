@@ -39,7 +39,7 @@ class Inventory(models.Model):
     branch = models.ForeignKey('branches.Branch', on_delete=models.CASCADE, related_name='inventory_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='inventory_items')
     quantity_on_hand = models.IntegerField(default=0)
-    reorder_level = models.IntegerField(default=10)
+    reorder_level = models.IntegerField(default=0)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

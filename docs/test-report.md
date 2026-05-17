@@ -1,3 +1,3 @@
 # Test report
 
-Báo cáo kết quả kiểm thử của dự án POS.
+Báo cáo này sẽ ghi nhận kết quả kiểm thử unit, API và manual cho từng chức năng trọng yếu của hệ thống POS.

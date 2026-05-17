@@ -1,7 +1,7 @@
 from django.db import migrations, models
-import django.db.models.deletion
 import django.contrib.auth.models
 import django.contrib.auth.validators
+import django.db.models.deletion
 from django.utils.timezone import now
 
 
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=now, verbose_name='date joined')),
                 ('full_name', models.CharField(max_length=150)),
-                ('role', models.CharField(choices=[('admin', 'Admin'), ('cashier', 'Cashier')], default='cashier', max_length=20)),
+                ('role', models.CharField(choices=[('admin', 'Admin'), ('cashier', 'Cashier'), ('customer', 'Customer')], default='cashier', max_length=20)),
                 ('branch', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='users', to='branches.branch')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),

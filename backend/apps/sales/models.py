@@ -1,6 +1,20 @@
 from django.db import models
 
 
+class PricingPolicy(models.Model):
+    name = models.CharField(max_length=150, default='Default policy')
+    vat_rate = models.DecimalField(max_digits=5, decimal_places=2, default=10)
+    global_promotion = models.ForeignKey('Promotion', on_delete=models.SET_NULL, null=True, blank=True, related_name='pricing_policies')
+    is_active = models.BooleanField(default=True)
+    effective_from = models.DateTimeField(null=True, blank=True)
+    effective_to = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Promotion(models.Model):
     class PromotionType(models.TextChoices):
         PERCENT = 'percent', 'Percent'
@@ -35,6 +49,7 @@ class SalesOrder(models.Model):
     cashier = models.ForeignKey('accounts.User', on_delete=models.PROTECT, related_name='sales_orders')
     customer = models.ForeignKey('customers.Customer', on_delete=models.SET_NULL, null=True, blank=True, related_name='sales_orders')
     promotion = models.ForeignKey(Promotion, on_delete=models.SET_NULL, null=True, blank=True, related_name='sales_orders')
+    pricing_policy = models.ForeignKey(PricingPolicy, on_delete=models.SET_NULL, null=True, blank=True, related_name='sales_orders')
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     discount_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     tax_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)

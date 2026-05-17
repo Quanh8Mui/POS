@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Customer(models.Model):
+    user = models.OneToOneField('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='customer_profile')
     full_name = models.CharField(max_length=150)
     phone = models.CharField(max_length=20, unique=True, null=True, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
