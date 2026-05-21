@@ -3,18 +3,6 @@ import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
 
 const guestCustomer = { id: null, full_name: 'Khách vãng lai', phone: '' };
-const quickCategories = [
-  { key: 'all', label: 'Tất cả' },
-  { key: 'beverages', label: 'Đồ uống' },
-  { key: 'snacks', label: 'Snack' },
-  { key: 'household', label: 'Gia dụng' },
-];
-
-const categoryMatchers = {
-  beverages: ['beverage', 'water', 'soda', 'juice', 'tea', 'coffee'],
-  snacks: ['snack', 'chips', 'noodle', 'cake', 'biscuit', 'cracker'],
-  household: ['household', 'detergent', 'shampoo', 'soap', 'cleaner'],
-};
 
 function formatMoney(value) {
   return Number(value || 0).toLocaleString('vi-VN');
@@ -23,6 +11,7 @@ function formatMoney(value) {
 export default function PosPage() {
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [query, setQuery] = useState('');
   const [customerQuery, setCustomerQuery] = useState('');
@@ -41,8 +30,9 @@ export default function PosPage() {
 
   useEffect(() => {
     const load = async () => {
-      const [productsRes, customersRes, meRes, policyResult, promotionsResult] = await Promise.allSettled([
+      const [productsRes, categoriesRes, customersRes, meRes, policyResult, promotionsResult] = await Promise.allSettled([
         api.get('/catalog/products/'),
+        api.get('/catalog/categories/'),
         api.get('/customers/'),
         api.get('/accounts/me/'),
         api.get('/sales/pricing-policies/active/'),
@@ -50,6 +40,7 @@ export default function PosPage() {
       ]);
 
       setProducts(productsRes.status === 'fulfilled' ? productsRes.value.data : []);
+      setCategories(categoriesRes.status === 'fulfilled' ? categoriesRes.value.data : []);
       setCustomers(customersRes.status === 'fulfilled' ? customersRes.value.data : []);
       setCurrentBranch(meRes.status === 'fulfilled' ? meRes.value.data.branch || null : null);
       setPricingPolicy(policyResult.status === 'fulfilled' ? policyResult.value.data : null);
@@ -60,14 +51,23 @@ export default function PosPage() {
     load();
   }, []);
 
+  const categoryTabs = useMemo(() => {
+    const mapped = categories
+      .filter((category) => category.is_active !== false)
+      .map((category) => ({
+        key: String(category.id),
+        label: category.name,
+      }));
+    return [{ key: 'all', label: 'Tất cả' }, ...mapped];
+  }, [categories]);
+
   const filteredProducts = useMemo(() => {
     const q = query.toLowerCase();
     return products.filter((product) => {
-      const productText = `${product.name} ${product.sku} ${product.unit}`.toLowerCase();
+      const productText = `${product.name} ${product.sku} ${product.unit} ${product.category_name || ''}`.toLowerCase();
       const matchQuery = productText.includes(q);
-      const matchCategory =
-        activeCategory === 'all' ||
-        categoryMatchers[activeCategory]?.some((keyword) => productText.includes(keyword));
+      const productCategoryId = product.category ? String(product.category) : '';
+      const matchCategory = activeCategory === 'all' || activeCategory === productCategoryId;
       return matchQuery && matchCategory;
     });
   }, [products, query, activeCategory]);
@@ -164,7 +164,7 @@ export default function PosPage() {
           </div>
 
           <div className="pill-row pos-category-row">
-            {quickCategories.map((category) => (
+            {categoryTabs.map((category) => (
               <button
                 key={category.key}
                 type="button"
@@ -179,10 +179,9 @@ export default function PosPage() {
           <div className="product-list pos-product-list">
             {filteredProducts.map((product) => (
               <div className="product-row pos-product-row" key={product.id}>
-                <div>
+                <div className="pos-product-info">
                   <strong>{product.name}</strong>
-                  <p>{product.sku} · {product.unit}</p>
-                  <p className="pos-product-meta">Còn lại: <strong>{product.quantity_on_hand ?? 'N/A'}</strong></p>
+                  <p>{product.sku} · {product.category_name || 'Chưa phân loại'} · Còn lại {product.quantity_on_hand ?? 'N/A'}</p>
                 </div>
                 <div className="pos-product-actions">
                   <span className={`pill ${Number(product.quantity_on_hand) <= Number(product.reorder_level || 0) ? '' : 'muted'}`}>

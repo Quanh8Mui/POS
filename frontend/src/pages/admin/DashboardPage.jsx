@@ -45,7 +45,7 @@ export default function DashboardPage() {
       <div className="grid grid-2" style={{ marginTop: 18 }}>
         <div className="card section-card">
           <h3 className="section-title">Tổng quan hệ thống</h3>
-          <p>Giao diện sáng, trực quan, tối ưu cho quản trị nhanh trên desktop.</p>
+          <p>Giao diện sáng, trực quan, tối ưu cho quản trị.</p>
           <div className="pill-row" style={{ marginTop: 14 }}>
             <span className="pill">Branches</span>
             <span className="pill">Products</span>
@@ -54,7 +54,7 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="card section-card">
-          <h3 className="section-title">Cần làm tiếp</h3>
+          <h3 className="section-title">Biểu đồ doanh thu</h3>
           <p>Biểu đồ doanh thu, top sản phẩm và cảnh báo tồn kho thấp.</p>
         </div>
       </div>

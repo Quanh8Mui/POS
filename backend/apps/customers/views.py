@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 from apps.sales.models import LoyaltyTransaction, SalesOrder
 from apps.sales.serializers import LoyaltyTransactionSerializer, SalesOrderSerializer
@@ -9,6 +10,7 @@ from .models import Customer
 from .serializers import CustomerSerializer
 
 
+@extend_schema(tags=['Admin - Customer Management', 'POS - Sales'])
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializer

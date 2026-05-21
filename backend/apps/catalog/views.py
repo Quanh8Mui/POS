@@ -1,17 +1,27 @@
 from django.db import models
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
 from .models import Category, Inventory, Product
 from .serializers import CategorySerializer, InventorySerializer, ProductSerializer
 
 
+@extend_schema(tags=['Admin - Product Management'])
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(models.Q(name__icontains=search))
+        return queryset
 
+
+@extend_schema(tags=['Admin - Product Management', 'POS - Sales'])
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related('category').all()
     serializer_class = ProductSerializer
@@ -32,6 +42,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+@extend_schema(tags=['Admin - Inventory Management', 'POS - Sales'])
 class InventoryViewSet(viewsets.ModelViewSet):
     queryset = Inventory.objects.select_related('branch', 'product').all()
     serializer_class = InventorySerializer

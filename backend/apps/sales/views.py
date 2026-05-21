@@ -6,6 +6,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 from apps.catalog.models import Inventory, Product
 from apps.customers.models import Customer
@@ -13,6 +14,7 @@ from .models import LoyaltyTransaction, PricingPolicy, Promotion, SalesOrder, Sa
 from .serializers import LoyaltyTransactionSerializer, PricingPolicySerializer, PromotionSerializer, SalesOrderSerializer, StockMovementSerializer
 
 
+@extend_schema(tags=['Admin - Pricing & Tax'])
 class PricingPolicyViewSet(viewsets.ModelViewSet):
     queryset = PricingPolicy.objects.select_related('global_promotion').all()
     serializer_class = PricingPolicySerializer
@@ -26,6 +28,7 @@ class PricingPolicyViewSet(viewsets.ModelViewSet):
         return Response(self.get_serializer(policy).data)
 
 
+@extend_schema(tags=['Admin - Pricing & Tax', 'POS - Sales'])
 class PromotionViewSet(viewsets.ModelViewSet):
     queryset = Promotion.objects.all()
     serializer_class = PromotionSerializer
@@ -38,12 +41,14 @@ class PromotionViewSet(viewsets.ModelViewSet):
         return Response(self.get_serializer(queryset, many=True).data)
 
 
+@extend_schema(tags=['Admin - Loyalty Management'])
 class LoyaltyTransactionViewSet(viewsets.ModelViewSet):
     queryset = LoyaltyTransaction.objects.select_related('customer', 'sale_order').all()
     serializer_class = LoyaltyTransactionSerializer
     permission_classes = [IsAuthenticated]
 
 
+@extend_schema(tags=['Admin - Inventory Management'])
 class StockMovementViewSet(viewsets.ModelViewSet):
     queryset = StockMovement.objects.select_related('branch', 'product', 'created_by').all()
     serializer_class = StockMovementSerializer
@@ -56,6 +61,7 @@ class StockMovementViewSet(viewsets.ModelViewSet):
         inventory.save(update_fields=['quantity_on_hand', 'updated_at'])
 
 
+@extend_schema(tags=['POS - Sales', 'Admin - Sales Management'])
 class SalesOrderViewSet(viewsets.ModelViewSet):
     queryset = SalesOrder.objects.select_related('branch', 'cashier', 'customer', 'promotion', 'pricing_policy').prefetch_related('items').all()
     serializer_class = SalesOrderSerializer

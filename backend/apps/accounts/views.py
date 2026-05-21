@@ -6,6 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from apps.customers.models import Customer
 from .permissions import IsAdminOrCashier
@@ -20,6 +21,7 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
+@extend_schema(tags=['Auth'])
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -27,6 +29,7 @@ class MeView(APIView):
         return Response(UserSerializer(request.user).data)
 
 
+@extend_schema(tags=['Auth'])
 class LoginView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [CsrfExemptSessionAuthentication]
@@ -45,6 +48,7 @@ class LoginView(APIView):
         return Response(UserSerializer(user).data)
 
 
+@extend_schema(tags=['Auth'])
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [CsrfExemptSessionAuthentication]
@@ -70,6 +74,7 @@ class RegisterView(APIView):
         return Response(response_data, status=status.HTTP_201_CREATED)
 
 
+@extend_schema(tags=['Auth'])
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -86,6 +91,7 @@ class ChangePasswordView(APIView):
         return Response({'detail': 'Password changed successfully'})
 
 
+@extend_schema(tags=['Auth'])
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -94,6 +100,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(tags=['Admin - Staff Management'])
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.select_related('branch').all()
     serializer_class = UserSerializer

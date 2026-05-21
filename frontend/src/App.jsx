@@ -9,6 +9,7 @@ import ChangePasswordPage from './pages/auth/ChangePasswordPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import BranchesPage from './pages/admin/BranchesPage';
 import PricingPolicyPage from './pages/admin/PricingPolicyPage';
+import ProductsPage from './pages/admin/ProductsPage';
 import ReportsPage from './pages/admin/ReportsPage';
 import StaffManagementPage from './pages/admin/StaffManagementPage';
 import PosPage from './pages/staff/PosPage';
@@ -26,6 +27,7 @@ function AdminApp() {
       navItems={[
         { to: '/admin/dashboard', label: 'Dashboard' },
         { to: '/admin/branches', label: 'Branches' },
+        { to: '/admin/products', label: 'Products' },
         { to: '/admin/pricing-policy', label: 'Pricing & Tax' },
         { to: '/admin/staff', label: 'Staff Management' },
         { to: '/admin/reports', label: 'Reports' },
@@ -34,6 +36,7 @@ function AdminApp() {
       <Routes>
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="branches" element={<BranchesPage />} />
+        <Route path="products" element={<ProductsPage />} />
         <Route path="pricing-policy" element={<PricingPolicyPage />} />
         <Route path="staff" element={<StaffManagementPage />} />
         <Route path="reports" element={<ReportsPage />} />
@@ -85,6 +88,11 @@ function CustomerApp() {
   );
 }
 
+function SwaggerRedirect() {
+  window.location.replace('http://localhost:8000/api/docs/');
+  return null;
+}
+
 function RouterRoot() {
   const { isAuthenticated, role } = useAuth();
 
@@ -93,6 +101,7 @@ function RouterRoot() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/swagger" element={<SwaggerRedirect />} />
       <Route path="/change-password" element={<ChangePasswordPage />} />
       <Route path="/admin/*" element={<ProtectedRoute roles={["admin"]}><AdminApp /></ProtectedRoute>} />
       <Route path="/staff/*" element={<ProtectedRoute roles={["admin", "cashier"]}><StaffApp /></ProtectedRoute>} />
