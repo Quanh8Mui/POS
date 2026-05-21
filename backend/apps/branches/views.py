@@ -6,7 +6,7 @@ from .models import Branch
 from .serializers import BranchSerializer
 
 
-@extend_schema(tags=['Admin - Branch Management'])
+@extend_schema(tags=['Admin - Branch Management'], responses={200: BranchSerializer})
 class BranchViewSet(viewsets.ModelViewSet):
     queryset = Branch.objects.all()
     serializer_class = BranchSerializer

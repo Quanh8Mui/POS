@@ -10,7 +10,7 @@ from .models import Customer
 from .serializers import CustomerSerializer
 
 
-@extend_schema(tags=['Admin - Customer Management', 'POS - Sales'])
+@extend_schema(tags=['Admin - Customer Management', 'POS - Sales'], responses={200: CustomerSerializer})
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializer

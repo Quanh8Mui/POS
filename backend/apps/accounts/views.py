@@ -6,7 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema
 
 from apps.customers.models import Customer
 from .permissions import IsAdminOrCashier
@@ -21,7 +21,7 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
-@extend_schema(tags=['Auth'])
+@extend_schema(tags=['Auth'], responses={200: UserSerializer})
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -29,7 +29,7 @@ class MeView(APIView):
         return Response(UserSerializer(request.user).data)
 
 
-@extend_schema(tags=['Auth'])
+@extend_schema(tags=['Auth'], request=LoginSerializer, responses={200: UserSerializer})
 class LoginView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [CsrfExemptSessionAuthentication]
@@ -48,7 +48,7 @@ class LoginView(APIView):
         return Response(UserSerializer(user).data)
 
 
-@extend_schema(tags=['Auth'])
+@extend_schema(tags=['Auth'], request=RegisterSerializer, responses={201: UserSerializer})
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = [CsrfExemptSessionAuthentication]
@@ -74,7 +74,7 @@ class RegisterView(APIView):
         return Response(response_data, status=status.HTTP_201_CREATED)
 
 
-@extend_schema(tags=['Auth'])
+@extend_schema(tags=['Auth'], request=ChangePasswordSerializer, responses={200: dict})
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -91,7 +91,7 @@ class ChangePasswordView(APIView):
         return Response({'detail': 'Password changed successfully'})
 
 
-@extend_schema(tags=['Auth'])
+@extend_schema(tags=['Auth'], responses={204: None})
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 

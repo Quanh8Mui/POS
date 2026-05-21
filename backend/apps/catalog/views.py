@@ -7,7 +7,7 @@ from .models import Category, Inventory, Product
 from .serializers import CategorySerializer, InventorySerializer, ProductSerializer
 
 
-@extend_schema(tags=['Admin - Product Management'])
+@extend_schema(tags=['Admin - Product Management'], responses={200: CategorySerializer})
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
