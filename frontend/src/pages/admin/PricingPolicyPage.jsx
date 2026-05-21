@@ -87,10 +87,10 @@ export default function PricingPolicyPage() {
         </div>
       </div>
 
-      <div className="grid grid-2">
-        <div className="card section-card">
+      <div className="grid grid-2 pricing-policy-grid" style={{ alignItems: 'stretch' }}>
+        <div className="card section-card pricing-policy-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <h3 className="section-title">Chính sách giá & thuế</h3>
-          <div className="grid" style={{ marginTop: 14 }}>
+          <div className="grid" style={{ marginTop: 14, flex: 1 }}>
             <input className="input" value={form.name} onChange={(e) => setForm((cur) => ({ ...cur, name: e.target.value }))} placeholder="Tên chính sách" />
             <input className="input" type="number" value={form.vat_rate} onChange={(e) => setForm((cur) => ({ ...cur, vat_rate: e.target.value }))} placeholder="VAT %" />
             <select className="input" value={form.global_promotion} onChange={(e) => setForm((cur) => ({ ...cur, global_promotion: e.target.value }))}>
@@ -103,13 +103,15 @@ export default function PricingPolicyPage() {
               <input type="checkbox" checked={form.is_active} onChange={(e) => setForm((cur) => ({ ...cur, is_active: e.target.checked }))} />
               <span>Kích hoạt chính sách</span>
             </label>
-            <button type="button" className="button primary" onClick={savePolicy}>Lưu chính sách</button>
+            <div style={{ marginTop: 'auto' }}>
+              <button type="button" className="button primary" style={{ width: '100%', minHeight: 44 }} onClick={savePolicy}>Lưu chính sách</button>
+            </div>
           </div>
         </div>
 
-        <div className="card section-card">
+        <div className="card section-card pricing-policy-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <h3 className="section-title">Tạo khuyến mãi toàn chuỗi</h3>
-          <div className="grid" style={{ marginTop: 14 }}>
+          <div className="grid" style={{ marginTop: 14, flex: 1 }}>
             <input className="input" value={promotionForm.name} onChange={(e) => setPromotionForm((cur) => ({ ...cur, name: e.target.value }))} placeholder="Tên khuyến mãi" />
             <select className="input" value={promotionForm.type} onChange={(e) => setPromotionForm((cur) => ({ ...cur, type: e.target.value }))}>
               <option value="percent">Percent</option>
@@ -118,7 +120,9 @@ export default function PricingPolicyPage() {
             <input className="input" type="number" value={promotionForm.value} onChange={(e) => setPromotionForm((cur) => ({ ...cur, value: e.target.value }))} placeholder="Giá trị" />
             <input className="input" type="datetime-local" value={promotionForm.start_at} onChange={(e) => setPromotionForm((cur) => ({ ...cur, start_at: e.target.value }))} />
             <input className="input" type="datetime-local" value={promotionForm.end_at} onChange={(e) => setPromotionForm((cur) => ({ ...cur, end_at: e.target.value }))} />
-            <button type="button" className="button primary" onClick={savePromotion}>Tạo khuyến mãi</button>
+            <div style={{ marginTop: 'auto' }}>
+              <button type="button" className="button primary" style={{ width: '100%', minHeight: 44 }} onClick={savePromotion}>Tạo khuyến mãi</button>
+            </div>
           </div>
         </div>
       </div>

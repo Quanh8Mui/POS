@@ -1,8 +1,12 @@
 from pathlib import Path
 import os
 
-import dj_database_url
 from dotenv import load_dotenv
+
+try:
+    import dj_database_url
+except ImportError:  # pragma: no cover - fallback when dependency is unavailable
+    dj_database_url = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
@@ -69,9 +73,16 @@ TEMPLATES = [
 ]
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}'))
-}
+database_url = os.getenv('DATABASE_URL')
+if database_url and dj_database_url is not None:
+    DATABASES = {'default': dj_database_url.config(default=database_url)}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_USER_MODEL = 'accounts.User'
 AUTH_PASSWORD_VALIDATORS = []

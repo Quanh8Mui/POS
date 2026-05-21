@@ -47,7 +47,7 @@ export default function HistoryPage() {
       <div className="page-header">
         <div>
           <h2>Purchase History</h2>
-          <p>Lịch sử mua hàng đã đồng bộ từ backend theo tài khoản đang đăng nhập.</p>
+          <p>Lịch sử mua hàng</p>
         </div>
         <span className="pill">{customer?.full_name || user?.full_name || 'Guest'}</span>
       </div>

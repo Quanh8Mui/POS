@@ -14,7 +14,7 @@
 - Tính khuyến mãi và cộng điểm
 - Báo cáo doanh thu và tồn kho
 
-## Phạm vi MVP
+## Phạm vi
 - Tập trung vào POS siêu thị mini bán tại quầy
 - Khách hàng không bắt buộc có portal riêng
 - Thanh toán mô phỏng, không tích hợp cổng thanh toán thật

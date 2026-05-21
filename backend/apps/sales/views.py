@@ -75,7 +75,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
 
         policy = PricingPolicy.objects.filter(is_active=True).order_by('-updated_at').first()
         vat_rate = Decimal(str(data.get('vat_rate', policy.vat_rate if policy else 10)))
-        promo_id = data.get('promotion_id') or (policy.global_promotion_id if policy and policy.global_promotion_id else None)
+        promo_id = data.get('promotion_id') or None
 
         with transaction.atomic():
             order = SalesOrder.objects.create(
@@ -127,17 +127,19 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
                 )
 
             promo_discount = Decimal('0')
-            if policy and policy.global_promotion_id and policy.global_promotion:
-                promo = policy.global_promotion
-                if promo.type == Promotion.PromotionType.PERCENT:
-                    promo_discount = subtotal * (promo.value / Decimal('100'))
-                else:
-                    promo_discount = promo.value
+            if promo_id:
+                promo = Promotion.objects.filter(pk=promo_id, is_active=True).first()
+                if promo:
+                    if promo.type == Promotion.PromotionType.PERCENT:
+                        promo_discount = subtotal * (promo.value / Decimal('100'))
+                    else:
+                        promo_discount = promo.value
 
-            vat_amount = (subtotal - promo_discount - order.discount_amount) * (vat_rate / Decimal('100'))
+            discount_amount = Decimal(str(data.get('discount_amount', 0)))
+            vat_amount = (subtotal - discount_amount) * (vat_rate / Decimal('100'))
             order.subtotal = subtotal
             order.tax_amount = vat_amount
-            order.total_amount = max(subtotal - promo_discount - order.discount_amount + vat_amount, Decimal('0'))
+            order.total_amount = max(subtotal - discount_amount - promo_discount + vat_amount, Decimal('0'))
             order.save(update_fields=['subtotal', 'total_amount', 'discount_amount', 'tax_amount', 'promotion', 'pricing_policy'])
 
             customer_id = data.get('customer_id')
